@@ -1,0 +1,11 @@
+{
+    "merchant_id":"0091eb52-688b-44ed-9d46-21e7940f37cf",
+    "callback_url":"https://hokm3000.herokuapp.com/pay/callback",
+    "metadata":{"mobile":"09394692665","email":"mohn.info@gmail.com"},
+    "MongoURL":"mongodb+srv://mohamad:vxvxzJpZj5G6wk4P@cluster0.kwz6n.mongodb.net/Hokm?retryWrites=true&w=majority",
+    "MongoOpt":{"useNewUrlParser": true,"useUnifiedTopology": true ,"useFindAndModify":false},
+    "PaymentURLs":{
+        "request":"https://api.zarinpal.com/pg/v4/payment/request.json",
+        "verify":"https://api.zarinpal.com/pg/v4/payment/verify.json"
+    } 
+}

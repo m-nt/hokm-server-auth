@@ -1,0 +1,34 @@
+{
+  "name": "authenticate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app",
+    "start": "node app"
+  },
+"engines": {
+    "node": "latest",
+    "npm": "latest"
+  },
+  "dependencies": {
+    "axios": "latest",
+    "bcryptjs": "latest",
+    "cookie-parser": "latest",
+    "cors": "latest",
+    "express": "latest",
+    "express-http-proxy": "latest",
+    "express-session": "latest",
+    "jalali-date": "latest",
+    "mongoose": "latest",
+    "multer": "latest",
+    "passport": "latest",
+    "passport-cookie": "latest",
+    "passport-local": "latest"
+  },
+  "author": "mohamad nosratian",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "latest"
+  }
+}
