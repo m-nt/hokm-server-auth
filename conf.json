@@ -3,7 +3,7 @@
     "callback_url":"https://api.arm78.ir/pay/callback",
     "metadata":{"mobile":"09229396596","email":"armingames1378@gmail.com"},
     "MongoURL":"mongodb://localhost:27017/Hokm",
-    "MongoOpt":{"useNewUrlParser": true,"useUnifiedTopology": true ,"useFindAndModify":false},
+    "MongoOpt":{},
     "PaymentURLs":{
         "request":"https://api.zarinpal.com/pg/v4/payment/request.json",
         "verify":"https://api.zarinpal.com/pg/v4/payment/verify.json"
