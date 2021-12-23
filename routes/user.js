@@ -113,7 +113,7 @@ router.post("/leaderboard", upload.none(), IsAuthenticated, (req, res) => {
     .sort({ Curency: -1 })
     .limit(limit)
     .then((result) => {
-      res.send({ message: "Users found seccussfully",users=result, code: "ok" });
+      res.send({ message: "Users found seccussfully", users: result, code: "ok" });
     })
     .catch((err) => {
       if (err) res.send({ message: "failed to retrieve players !", code: "nok" });
