@@ -14,6 +14,7 @@
   "dependencies": {
     "axios": "latest",
     "bcryptjs": "latest",
+    "connect-mongo": "latest",
     "cookie-parser": "latest",
     "cors": "latest",
     "express": "latest",
