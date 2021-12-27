@@ -35,7 +35,10 @@ router.post("/register", upload.single("Avatar"), (req, res) => {
         const NewUser = new User({
           Username,
           Password,
-          Avatar: avatar,
+          Avatar: {
+            data: avatar,
+            contentType: "image/jpg",
+          },
           DeviceInfo: deviceInfo,
         });
         bcrypt
@@ -157,7 +160,10 @@ router.post("/updateuser", upload.single("Avatar"), IsAuthenticated, (req, res) 
           { Username: req.user.Username },
           {
             Username: name.length > 0 ? name : req.user.Username,
-            Avatar: avatar,
+            Avatar: {
+              data: avatar,
+              contentType: "image/jpg",
+            },
             Curency: curency,
             DeckOfCard: deckofcard,
             Background: background,
