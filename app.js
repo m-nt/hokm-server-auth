@@ -13,6 +13,7 @@ const VIP = require("./models/vipticket");
 const DEL_VIP = require("./models/deletedvip");
 const FriendListModel = require("./models/friendlist");
 const DeletedFriendListModel = require("./models/deletedfrndlist");
+const User = require("./models/User");
 const cookieParser = require("cookie-parser");
 //passport config
 require("./config/passport")(passport);
@@ -80,6 +81,20 @@ setInterval(() => {
     .catch((err) => {
       console.log(err);
     });
+  User.find({ $or: [{ Debt: { $gt: 0 } }, { Debt: { $lt: 0 } }] })
+    .then((users) => {
+      if (users.length > 0) {
+        users.forEach((user) => {
+          user.Curency += user.Debt;
+          user.Debt = 0;
+          user.save();
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
 }, 60000);
 
 app.listen(PORT, console.log(`app listening on port:${PORT}`));
