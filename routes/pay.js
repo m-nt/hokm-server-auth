@@ -32,11 +32,11 @@ router.post("/init", IsAuthenticated, (req, res) => {
       } else {
         const paym = new Pay({ amount: amount, description: description, authority: authority, user_pk: req.user._id });
         paym.save();
-        res.send({ message: "Payment seccussfuly generated", code: "ok" });
+        return res.send({ message: "Payment seccussfuly generated", code: "ok" });
       }
     })
     .catch((err) => {
-      res.send({ message: "we have problem to access db", code: "nok", error: err });
+      return res.send({ message: "we have problem to access db", code: "nok", error: err });
     });
 });
 router.get("/callback", (req, res) => {
@@ -66,12 +66,12 @@ router.get("/callback", (req, res) => {
           }
         )
         .then((resp) => {
-          console.log("verify returned");
+          //console.log("verify returned");
           let data = resp.data.data;
-          console.log(data);
+          //console.log(data);
           if (data.code == 100 || data.code == 101) {
             // This is the place to activate the purchase
-            console.log("verify accepted");
+            //console.log("verify accepted");
             pay.code = data.code;
             pay.message = data.message;
             pay.card_pan = data.card_pan;
@@ -81,7 +81,7 @@ router.get("/callback", (req, res) => {
             pay.save();
             switch (pay.description) {
               case "1M":
-                console.log(pay.description);
+                //console.log(pay.description);
                 date1 = new Date(Date.now());
                 date1.setMonth(date1.getMonth() + 1);
                 const vip1 = new VIP({
@@ -92,7 +92,7 @@ router.get("/callback", (req, res) => {
                 vip1.save();
                 break;
               case "2M":
-                console.log(pay.description);
+                //console.log(pay.description);
                 date2 = new Date(Date.now());
                 date2.setMonth(date2.getMonth() + 2);
                 const vip2 = new VIP({
@@ -103,7 +103,7 @@ router.get("/callback", (req, res) => {
                 vip2.save();
                 break;
               case "3M":
-                console.log(pay.description);
+                //console.log(pay.description);
                 date3 = new Date(Date.now());
                 date3.setMonth(date3.getMonth() + 3);
                 const vip3 = new VIP({
@@ -114,14 +114,14 @@ router.get("/callback", (req, res) => {
                 vip3.save();
                 break;
               default:
-                console.log(pay.description);
+                //console.log(pay.description);
                 User.findOne({ _id: pay.user_pk })
                   .then((user) => {
                     if (user) {
                       user.Curency += Number(pay.description);
                       user.save();
                     } else {
-                      console.log("User Didn't found");
+                      //console.log("User Didn't found");
                     }
                   })
                   .catch((err) => {
