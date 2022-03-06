@@ -150,7 +150,7 @@ router.get("/callback", (req, res) => {
   }
 });
 
-router.post("/bazzarpay", upload.none(), IsAuthenticated, (req, res) => {
+router.post("/bazzarpay", IsAuthenticated, (req, res) => {
   const { product_id, purchase_token } = req.body;
   if (!product_id || !purchase_token) {
     return res.send({ message: "Product detail is needed", code: "nok" });
