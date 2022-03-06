@@ -193,9 +193,14 @@ function getAccessToken() {
       }
     )
     .then((res) => {
+console.log("getAcessToken");
+console.log(res.status);
+console.log(res.statusText);
       return res;
     })
     .catch((err) => {
+console.log("getAcessToken");
+console.log(err);
       return null;
     });
   return null;
@@ -210,9 +215,14 @@ function verifyPurchase(product_id, purchase_token, access_token) {
       },
     })
     .then((res) => {
+console.log("verifyPurchase");
+console.log(res.status);
+console.log(res.statusText);
       return res;
     })
     .catch((err) => {
+console.log("verifyPurchase");
+console.log(err);
       return null;
     });
   return null;
