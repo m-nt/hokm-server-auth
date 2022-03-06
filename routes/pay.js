@@ -201,7 +201,7 @@ console.log(res.statusText);
     .catch((err) => {
 console.log("getAcessToken");
 console.log(err.message);
-console.log(err.data.error);
+console.log(err.response.data);
       return null;
     });
   return null;
@@ -224,7 +224,7 @@ console.log(res.statusText);
     .catch((err) => {
 console.log("verifyPurchase");
 console.log(err.message);
-console.log(err.data.error);
+console.log(err.response.data);
       return null;
     });
   return null;
