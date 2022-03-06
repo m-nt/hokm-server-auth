@@ -7,5 +7,12 @@
     "PaymentURLs":{
         "request":"https://api.zarinpal.com/pg/v4/payment/request.json",
         "verify":"https://api.zarinpal.com/pg/v4/payment/verify.json"
-    } 
+    } ,
+    "BazzarPay":{
+        "client_id":"s4yiU6ZTVnG5L87Sh9nCiId3N9zNhBmMhQucuusg",
+        "client_secret":"E6Vi2JON2BEdL9BOLJBvlpjinPxmi6ynpukiM0fKEfkrJ9x7FmtnD8gDSRjD",
+        "refresh_token":"eWN5WSQIYWoXjtcZKRrRK9xQdIKqZJ",
+        "get_access_token":"https://pardakht.cafebazaar.ir/devapi/v2/auth/token/",
+        "verify_purchase":"https://pardakht.cafebazaar.ir/devapi/v2/api/validate/com.arm78.hokmherfeyi/inapp/"
+    }
 }
