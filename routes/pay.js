@@ -200,7 +200,7 @@ console.log(res.statusText);
     })
     .catch((err) => {
 console.log("getAcessToken");
-console.log(err);
+console.log(err.message);
       return null;
     });
   return null;
@@ -222,7 +222,7 @@ console.log(res.statusText);
     })
     .catch((err) => {
 console.log("verifyPurchase");
-console.log(err);
+console.log(err.message);
       return null;
     });
   return null;
