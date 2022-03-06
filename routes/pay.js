@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios").default;
-const { merchant_id, callback_url, metadata, PaymentURLs } = require("../conf.json");
+const { merchant_id, callback_url, metadata, PaymentURLs, BazzarPay } = require("../conf.json");
 const Pay = require("../models/Payments");
 const { IsAuthenticated } = require("../config/Auth");
 const User = require("../models/User");
@@ -59,7 +59,7 @@ router.get("/callback", (req, res) => {
             authority: pay.authority,
           },
           {
-            headrs: {
+            headers: {
               accept: "application/json",
               "content-type": "application/json",
             },
@@ -149,4 +149,126 @@ router.get("/callback", (req, res) => {
     //res.sendFile("views/unseccesful.html", { root: __dirname });
   }
 });
+
+router.post("/bazzarpay", upload.none(), IsAuthenticated, (req, res) => {
+  const { product_id, purchase_token } = req.body;
+  if (!product_id || !purchase_token) {
+    return res.send({ message: "Product detail is needed", code: "nok" });
+  }
+  access_token_res = getAccessToken();
+  if (!access_token_res) return res.send({ message: "Failed to retrive access_token", code: "nok" });
+  if (access_token_res.status != 200) {
+    return res.send({ message: access_token_res.statusText, code: "nok" });
+  }
+  verify_purchase_res = verifyPurchase(product_id, purchase_token, access_token_res.access_token);
+  if (!verify_purchase_res) return res.send({ message: "Failed to retrive purchase info", code: "nok" });
+  if (verify_purchase_res.status != 200) {
+    return res.send({ message: verify_purchase_res.statusText, code: "nok" });
+  }
+  if (verify_purchase_res.data.purchaseState == 1) {
+    return res.send({ message: "Product is refunded", code: "nok" });
+  }
+  if (verify_purchase_res.data.consumptionState == 0) {
+    return res.send({ message: "Product is already consumed", code: "nok" });
+  }
+  consumeProduct(product_id, req.user._id);
+  return res.send({ message: "Product is seccussfuly consumed", code: "ok" });
+});
+
+function getAccessToken() {
+  axios
+    .post(
+      BazzarPay.get_access_token,
+      {
+        grant_type: "refresh_token",
+        client_id: BazzarPay.client_id,
+        client_secret: BazzarPay.client_secret,
+        refresh_token: BazzarPay.refresh_token,
+      },
+      {
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+      }
+    )
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return null;
+    });
+  return null;
+}
+function verifyPurchase(product_id, purchase_token, access_token) {
+  axios
+    .get(BazzarPay.verify_purchase + product_id + "/purchases/" + purchase_token + "/", {
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization: access_token,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return null;
+    });
+  return null;
+}
+function consumeProduct(product_id, User_pk) {
+  switch (product_id) {
+    case "1MM":
+      //console.log(pay.description);
+      date1 = new Date(Date.now());
+      date1.setMonth(date1.getMonth() + 1);
+      const vip1 = new VIP({
+        name: "1M",
+        user_pk: User_pk,
+        expires: new Date(date1.toJSON().replace(/\..*Z/g, "")),
+      });
+      vip1.save();
+      break;
+    case "2MM":
+      //console.log(pay.description);
+      date2 = new Date(Date.now());
+      date2.setMonth(date2.getMonth() + 2);
+      const vip2 = new VIP({
+        name: "2M",
+        user_pk: User_pk,
+        expires: new Date(date2.toJSON().replace(/\..*Z/g, "")),
+      });
+      vip2.save();
+      break;
+    case "3MM":
+      //console.log(pay.description);
+      date3 = new Date(Date.now());
+      date3.setMonth(date3.getMonth() + 3);
+      const vip3 = new VIP({
+        name: "3M",
+        user_pk: User_pk,
+        expires: new Date(date3.toJSON().replace(/\..*Z/g, "")),
+      });
+      vip3.save();
+      break;
+    default:
+      //console.log(pay.description);
+      amount = Number(product_id.slice(0, -1));
+      User.findOne({ _id: User_pk })
+        .then((user) => {
+          if (user) {
+            user.Curency += amount;
+            user.save();
+          } else {
+            console.log("User Didn't found");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      break;
+  }
+}
+
 module.exports = router;
