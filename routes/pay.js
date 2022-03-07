@@ -177,6 +177,7 @@ router.post("/bazzarpay", IsAuthenticated, (req, res) => {
 });
 
 function getAccessToken() {
+  result = null;
   const data = new url.URLSearchParams({
     grant_type: "refresh_token",
     client_id: BazzarPay.client_id,
@@ -195,23 +196,21 @@ function getAccessToken() {
       console.log("getAcessToken");
       console.log(res.status);
       console.log(res.statusText);
-      return res;
+      result = res;
     })
     .catch((err) => {
       console.log("getAcessToken");
       console.log(err.message);
       console.log(err.response.data);
-      return null;
     });
-  return null;
+  return result;
 }
 function verifyPurchase(product_id, purchase_token, access_token) {
+  result = null;
   axios
     .get(BazzarPay.verify_purchase + product_id + "/purchases/" + purchase_token + "/", {
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Content-Lenght": data.length,
         Host: "pardakht.cafebazaar.ir",
         Authorization: access_token,
       },
@@ -220,15 +219,14 @@ function verifyPurchase(product_id, purchase_token, access_token) {
       console.log("verifyPurchase");
       console.log(res.status);
       console.log(res.statusText);
-      return res;
+      result = res;
     })
     .catch((err) => {
       console.log("verifyPurchase");
       console.log(err.message);
       console.log(err.response.data);
-      return null;
     });
-  return null;
+  return result;
 }
 function consumeProduct(product_id, User_pk) {
   switch (product_id) {
