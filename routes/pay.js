@@ -187,21 +187,21 @@ function getAccessToken() {
       },
       {
         headers: {
-          accept: "application/json",
-          "content-type": "application/json",
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
       }
     )
     .then((res) => {
-console.log("getAcessToken");
-console.log(res.status);
-console.log(res.statusText);
+      console.log("getAcessToken");
+      console.log(res.status);
+      console.log(res.statusText);
       return res;
     })
     .catch((err) => {
-console.log("getAcessToken");
-console.log(err.message);
-console.log(err.response.data);
+      console.log("getAcessToken");
+      console.log(err.message);
+      console.log(err.response.data);
       return null;
     });
   return null;
@@ -210,21 +210,21 @@ function verifyPurchase(product_id, purchase_token, access_token) {
   axios
     .get(BazzarPay.verify_purchase + product_id + "/purchases/" + purchase_token + "/", {
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
+        Accept: "application/json",
+        "Content-Type": "application/json",
         Authorization: access_token,
       },
     })
     .then((res) => {
-console.log("verifyPurchase");
-console.log(res.status);
-console.log(res.statusText);
+      console.log("verifyPurchase");
+      console.log(res.status);
+      console.log(res.statusText);
       return res;
     })
     .catch((err) => {
-console.log("verifyPurchase");
-console.log(err.message);
-console.log(err.response.data);
+      console.log("verifyPurchase");
+      console.log(err.message);
+      console.log(err.response.data);
       return null;
     });
   return null;
