@@ -176,22 +176,21 @@ router.post("/bazzarpay", IsAuthenticated, (req, res) => {
 });
 
 function getAccessToken() {
+  const data = JSON.stringify({
+    grant_type: "refresh_token",
+    client_id: BazzarPay.client_id,
+    client_secret: BazzarPay.client_secret,
+    refresh_token: BazzarPay.refresh_token,
+  });
   axios
-    .post(
-      BazzarPay.get_access_token,
-      {
-        grant_type: "refresh_token",
-        client_id: BazzarPay.client_id,
-        client_secret: BazzarPay.client_secret,
-        refresh_token: BazzarPay.refresh_token,
+    .post(BazzarPay.get_access_token, data, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Content-Lenght": data.length,
+        Host: "pardakht.cafebazaar.ir",
       },
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    })
     .then((res) => {
       console.log("getAcessToken");
       console.log(res.status);
@@ -212,6 +211,8 @@ function verifyPurchase(product_id, purchase_token, access_token) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Content-Lenght": data.length,
+        Host: "pardakht.cafebazaar.ir",
         Authorization: access_token,
       },
     })
