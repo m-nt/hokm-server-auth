@@ -161,7 +161,7 @@ router.post("/bazzarpay", IsAuthenticated, (req, res) => {
   if (access_token_res.status != 200) {
     return res.send({ message: access_token_res.statusText, code: "nok" });
   }
-  verify_purchase_res = verifyPurchase(product_id, purchase_token, access_token_res.access_token);
+  verify_purchase_res = verifyPurchase(product_id, purchase_token, access_token_res.data.access_token);
   if (verify_purchase_res == null) return res.send({ message: "Failed to retrive purchase info", code: "nok" });
   if (verify_purchase_res.status != 200) {
     return res.send({ message: verify_purchase_res.statusText, code: "nok" });
@@ -196,7 +196,7 @@ function getAccessToken() {
       console.log("getAcessToken");
       console.log(res.status);
       console.log(res.statusText);
-      console.log(res);
+      console.log(res.data);
       result = res;
     })
     .catch((err) => {
@@ -220,6 +220,7 @@ function verifyPurchase(product_id, purchase_token, access_token) {
       console.log("verifyPurchase");
       console.log(res.status);
       console.log(res.statusText);
+      console.log(res.data);
       result = res;
     })
     .catch((err) => {
