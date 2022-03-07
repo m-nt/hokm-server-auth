@@ -196,6 +196,7 @@ function getAccessToken() {
       console.log("getAcessToken");
       console.log(res.status);
       console.log(res.statusText);
+      console.log(res);
       result = res;
     })
     .catch((err) => {
