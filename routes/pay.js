@@ -156,37 +156,37 @@ router.post("/bazzarpay", IsAuthenticated, (req, res) => {
   if (!product_id || !purchase_token) {
     return res.send({ message: "Product detail is needed", code: "nok" });
   }
-  access_token_res = getAccessToken();
-
-  console.log("getAcessToken");
-  console.log(access_token_res.status);
-  console.log(access_token_res.statusText);
-  console.log(access_token_res.data);
-  if (access_token_res == null) return res.send({ message: "Failed to retrive access_token", code: "nok" });
-  if (access_token_res.status != 200) {
-    return res.send({ message: access_token_res.statusText, code: "nok" });
-  }
-  verify_purchase_res = verifyPurchase(product_id, purchase_token, access_token_res.data.access_token);
-  console.log("verifyPurchase");
-  console.log(verify_purchase_res.status);
-  console.log(verify_purchase_res.statusText);
-  console.log(verify_purchase_res.data);
-  if (verify_purchase_res == null) return res.send({ message: "Failed to retrive purchase info", code: "nok" });
-  if (verify_purchase_res.status != 200) {
-    return res.send({ message: verify_purchase_res.statusText, code: "nok" });
-  }
-  if (verify_purchase_res.data.purchaseState == 1) {
-    return res.send({ message: "Product is refunded", code: "nok" });
-  }
-  if (verify_purchase_res.data.consumptionState == 0) {
-    return res.send({ message: "Product is already consumed", code: "nok" });
-  }
-  consumeProduct(product_id, req.user._id);
-  return res.send({ message: "Product is seccussfuly consumed", code: "ok" });
+  getAccessToken((res) => {
+    console.log("getAcessToken");
+    console.log(res.status);
+    console.log(res.statusText);
+    console.log(res.data);
+    if (res == null) return res.send({ message: "Failed to retrive access_token", code: "nok" });
+    if (res.status != 200) {
+      return res.send({ message: res.statusText, code: "nok" });
+    }
+    verifyPurchase(product_id, purchase_token, access_token_res.data.access_token, (res) => {
+      console.log("verifyPurchase");
+      console.log(res.status);
+      console.log(res.statusText);
+      console.log(res.data);
+      if (res == null) return res.send({ message: "Failed to retrive purchase info", code: "nok" });
+      if (res.status != 200) {
+        return res.send({ message: res.statusText, code: "nok" });
+      }
+      if (res.data.purchaseState == 1) {
+        return res.send({ message: "Product is refunded", code: "nok" });
+      }
+      if (res.data.consumptionState == 0) {
+        return res.send({ message: "Product is already consumed", code: "nok" });
+      }
+      consumeProduct(product_id, req.user._id);
+      return res.send({ message: "Product is seccussfuly consumed", code: "ok" });
+    });
+  });
 });
 
-function getAccessToken() {
-  result = {};
+function getAccessToken(callback) {
   const data = new url.URLSearchParams({
     grant_type: "refresh_token",
     client_id: BazzarPay.client_id,
@@ -202,15 +202,14 @@ function getAccessToken() {
       },
     })
     .then((res) => {
-      result = res;
+      callback(res);
     })
     .catch((err) => {
-      result = null;
+      callback(null);
     });
-  return result;
+  callback(null);
 }
-function verifyPurchase(product_id, purchase_token, access_token) {
-  result = {};
+function verifyPurchase(product_id, purchase_token, access_token, callback) {
   axios
     .get(BazzarPay.verify_purchase + product_id + "/purchases/" + purchase_token + "/", {
       headers: {
@@ -220,12 +219,12 @@ function verifyPurchase(product_id, purchase_token, access_token) {
       },
     })
     .then((res) => {
-      result = res;
+      callback(res);
     })
     .catch((err) => {
-      result = null;
+      callback(null);
     });
-  return result;
+  callback(null);
 }
 function consumeProduct(product_id, User_pk) {
   switch (product_id) {
