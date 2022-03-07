@@ -186,7 +186,7 @@ router.post("/bazzarpay", IsAuthenticated, (req, res) => {
 });
 
 function getAccessToken() {
-  result = null;
+  result = {};
   const data = new url.URLSearchParams({
     grant_type: "refresh_token",
     client_id: BazzarPay.client_id,
@@ -205,14 +205,12 @@ function getAccessToken() {
       result = res;
     })
     .catch((err) => {
-      console.log("getAcessToken");
-      console.log(err.message);
-      console.log(err.response.data);
+      result = null;
     });
   return result;
 }
 function verifyPurchase(product_id, purchase_token, access_token) {
-  result = null;
+  result = {};
   axios
     .get(BazzarPay.verify_purchase + product_id + "/purchases/" + purchase_token + "/", {
       headers: {
@@ -225,9 +223,7 @@ function verifyPurchase(product_id, purchase_token, access_token) {
       result = res;
     })
     .catch((err) => {
-      console.log("verifyPurchase");
-      console.log(err.message);
-      console.log(err.response.data);
+      result = null;
     });
   return result;
 }
